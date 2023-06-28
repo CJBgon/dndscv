@@ -76,12 +76,12 @@ p <- add_argument(
 )
 p <- add_argument(
     p,
-    "--loc_sv_type", type="integer", default=3
+    "--loc_sv_type", type="integer", default=3,
     help = 'Output: 1 = Global dN/dS values; 2 = Global dN/dS and dNdSloc; 3 = Global dN/dS, dNdSloc and dNdScv',
 )
 p <- add_argument(
     p,
-    "--gennum", type="integer", default=1
+    "--gennum", type="integer", default=1,
     help = 'NCBI genetic code number (default = 1; standard genetic code). To see the list of genetic codes supported use: ? seqinr::translate. Note that the same genetic code must be used in the dndscv and buildref functions.',
 )
 p <- add_argument(
