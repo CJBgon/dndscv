@@ -54,7 +54,7 @@ p <- add_argument(
 )
 p <- add_argument(
     p,
-    "--indels", action="store_true", default=FALSE,
+    "--indels", flag=TRUE,
     help = 'Use unique indel sites instead of the total number of indels (it tends to be more robust)',
 )
 p <- add_argument(
@@ -71,7 +71,7 @@ p <- add_argument(
 )
 p <- add_argument(
     p,
-    "--wnon_constrain", action="store_false", default=TRUE
+    "--wnon_constrain", flag=TRUE, default=TRUE,
     help = 'This constrains wnon==wspl (this typically leads to higher power to detect selection)',
 )
 p <- add_argument(
