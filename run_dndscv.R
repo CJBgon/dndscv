@@ -71,7 +71,7 @@ p <- add_argument(
 )
 p <- add_argument(
     p,
-    "--wnon_constrain", flag=TRUE, default=TRUE,
+    "--wnon_constrain", flag=TRUE,
     help = 'This constrains wnon==wspl (this typically leads to higher power to detect selection)',
 )
 p <- add_argument(
