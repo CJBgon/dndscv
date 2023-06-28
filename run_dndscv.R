@@ -4,7 +4,7 @@ suppressPackageStartupMessages(library("argparser"))
 
 
 ######### input arguments #############
-p <- arg_parser()
+p <- arg_parser("identify coding genes under positive selection")
 
 p <- add_argument(
     p,
