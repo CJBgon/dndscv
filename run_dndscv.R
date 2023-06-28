@@ -4,74 +4,89 @@ suppressPackageStartupMessages(library("argparser"))
 
 
 ######### input arguments #############
-parser <- ArgumentParser()
+p <- arg_parser()
 
-parser$add_argument(
-    "-f", "--input", type="character",
+p <- add_argument(
+    p,
+    "--varagg", type="character",
     help ='Path to the variant aggregate.'
 )
-parser$add_argument(
-    "-o", "--out", type="character", default='/out/',
+p <- add_argument(
+    p,
+    "--out", type="character", default='/out/',
     help = 'Path to the output directory.'
 )
-parser$add_argument(
-    "-r", "--ref", type="character",
+p <- add_argument(
+    p,
+    "--ref", type="character",
     help = '"hg38, hg19: or path to the reference cds file.',
     default = "hg19"
 )
-parser$add_argument(
-    "-s", "--subm", type="character",
+p <- add_argument(
+    p,
+    "--subm", type="character",
     help = 'Substitution model (precomputed models are available in the data directory) (submod_192r_3w.rda,12r and 2r are available too.)',
     default ="192r_3w"
 )
-parser$add_argument(
-    "-k", "--cancer_genes", type="character",
+p <- add_argument(
+    p,
+    "--known_cancer_genes", type="character",
     help = 'List of a-priori known cancer genes (to be excluded from the indel background model) - references the cancer gene census v81.  (cancergenes_cgc81.rda)',
     default ="cgc81"
 )
-parser$add_argument(
-    "-c", "--covariates", type="character",
+p <- add_argument(
+    p,
+    "--covariates", type="character",
     help = 'Covariates (a matrix of covariates -columns- for each gene -rows-) [default: reference covariates] [cv=NULL runs dndscv without covariates] (hg19_hg38_epigenome_pcawg.rda)',
     default ="hg19"
 )
-parser$add_argument(
-    "-m", "--maxmuts", type="integer",
+p <- add_argument(
+    p,
+    "--maxmuts", type="integer",
     help = 'If n<Inf, arbitrarily the first n mutations by chr position will be kept',
     default = 3
 )
-parser$add_argument(
-    "-t", "--maxtmb", type="integer",
+p <- add_argument(
+    p,
+    "--tmbmax", type="integer",
     help = 'to filter out hypermutated samples.',
     default = 3000
 )
-parser$add_argument(
-    "-i", "--indels", action="store_true", default=FALSE,
+p <- add_argument(
+    p,
+    "--indels", action="store_true", default=FALSE,
     help = 'Use unique indel sites instead of the total number of indels (it tends to be more robust)',
 )
-parser$add_argument(
-    "-p", "--mindels", type="integer",
+p <- add_argument(
+    p,
+    "--mindels", type="integer",
     help = 'Minimum number of indels required to run the indel recurrence module.',
     default = 5
 )
-parser$add_argument(
-    "-a", "--maxcov", type="integer",
+p <- add_argument(
+    p, 
+    "--amaxcov", type="integer",
     help = 'Maximum number of covariates that will be considered (additional columns in the matrix of covariates will be excluded)',
     default = 20
 )
-parser$add_argument(
-    "-w", "--constrain", action="store_false", default=TRUE
+p <- add_argument(
+    p,
+    "--wnon_constrain", action="store_false", default=TRUE
     help = 'This constrains wnon==wspl (this typically leads to higher power to detect selection)',
 )
-parser$add_argument(
-    "-d", "--output_type", type="integer", default=3
+p <- add_argument(
+    p,
+    "--loc_sv_type", type="integer", default=3
     help = 'Output: 1 = Global dN/dS values; 2 = Global dN/dS and dNdSloc; 3 = Global dN/dS, dNdSloc and dNdScv',
 )
-parser$add_argument(
-    "-g", "--gennum", type="integer", default=1
+p <- add_argument(
+    p,
+    "--gennum", type="integer", default=1
     help = 'NCBI genetic code number (default = 1; standard genetic code). To see the list of genetic codes supported use: ? seqinr::translate. Note that the same genetic code must be used in the dndscv and buildref functions.',
 )
-parser$add_argument(
-    "-n", "--runname", type="character",
+p <- add_argument(
+    p,
+    "--name", type="character",
     help = 'name of the run - given to output file',
     default='dndscv'
 )
@@ -80,7 +95,7 @@ parser$add_argument(
 #     help = 'limit the run to this vector of genes'
 # )
 
-args <- parser$parse_args()
+args <- parse_args(p)
 
 #### Wrangle input #####
 library("dndscv")
