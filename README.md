@@ -1,5 +1,7 @@
 dndscv
 =====
+**This fork:**
+Improves the runtime and memory requirments by vectorising the variant annotation and applying updates to Refsec N-matrix in aggregates.
 
 Description
 ---
