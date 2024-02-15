@@ -27,4 +27,5 @@
 #' @import IRanges
 #' @import Rsamtools
 #' @import Biostrings
+#' @import data.table
 NA
