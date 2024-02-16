@@ -426,7 +426,9 @@ dndscv = function(mutations, gene_list = NULL, refdb = "hg19", sm = "192r_3w", k
             stop(sprintf('%0.0f (%0.2g%%) mutations have a wrong reference base. Please confirm that you are not running data from a different assembly or species.',  mutations[,sum(wrong_ref)], 100*mutations[,mean(wrong_ref)]))
         }
         wrong_refbase = mutations[(wrong_ref), c(1:5)]
-    }
+    } else {
+        wrong_refbase = NULL
+        }
     mutations <- mutations[!(wrong_ref) & !is.na(impind), !"wrong_ref" ]
 
     # This is where we make another, minor, improvement in speed/resource requirements.
@@ -851,9 +853,6 @@ dndscv = function(mutations, gene_list = NULL, refdb = "hg19", sm = "192r_3w", k
         }
     }
 
-    if (!any(!is.na(wrong_ref))) {
-        wrong_refbase = NULL # Output value if there were no wrong bases
-    }
 
     annot = annot[,setdiff(colnames(annot),c("start","end","geneind"))]
 
