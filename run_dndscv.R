@@ -110,9 +110,12 @@ if (args$covariates == 'covariates_hg19_hg38_epigenome_pcawg.rda') {
 
 
 # read in table
-mutations <- fread(muts, sep='\t', header=TRUE)
+mutations <- fread(args$varagg, sep='\t', header=TRUE)
 # mutations <- mutations[,.(SAMPLE,CHROM,POS, REF,ALT)] # Restricting input matrix to first 5 columns
 mutations <- mutations[,.(CHROM,POS, REF,ALT,SAMPLE)]
+# refdb is from ensembl withouth 'chr' prefix.
+setDT(mutations)[, CHROM := gsub("\\chr", "",x=CHROM)]
+
 dndsout <- dndscv(
     mutations,  # the aggregate variantfile
     gene_list = NULL, # limit analysis to this gene list (vector)
@@ -133,9 +136,9 @@ dndsout <- dndscv(
     dc = NULL)
 
 write.table(
-    dndsout$sel_cv, 
+    dndsout$sel_cv,
     file=paste0(args$out, '/', args$name),
-    sep='\t', 
+    sep='\t',
     quote=FALSE
     )
 
