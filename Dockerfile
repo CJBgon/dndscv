@@ -4,7 +4,7 @@ FROM rocker/tidyverse:latest
 RUN mkdir /usr/src/app/
 RUN mkdir /usr/src/app/data
 WORKDIR /usr/src/app
-
+RUN apt-get update && apt-get upgrade -y
 # Install R packages
 RUN install2.r --error devtools
 RUN install2.r --error argparser

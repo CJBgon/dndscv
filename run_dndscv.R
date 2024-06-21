@@ -89,10 +89,18 @@ p <- add_argument(
     help = 'name of the run - given to output file',
     default='dndscv'
 )
-# parser$add_argument(
-#     "-v", "--genelist", type="character", nargs='+',
-#     help = 'limit the run to this vector of genes'
-# )
+p <- add_argument(
+    p,
+    "--genelist", type="character", nargs=Inf,
+    help = 'limit the run to this vector of genes',
+    default=NULL
+)
+p <- add_argument(
+    p,
+    "--mingenecovs", type="integer",
+    help = 'Minimum number of genes required to run the negative binomial regression model with covariates (default = 500)',
+    default=500
+)
 
 args <- parse_args(p)
 
@@ -118,7 +126,7 @@ setDT(mutations)[, CHROM := gsub("\\chr", "",x=CHROM)]
 
 dndsout <- dndscv(
     mutations,  # the aggregate variantfile
-    gene_list = NULL, # limit analysis to this gene list (vector)
+    gene_list = args$genelist, # limit analysis to this gene list (vector)
     refdb = args$ref, # reference file to use
     sm = args$subm,  # Substitution model (precomputed models are available in the data directory) (submod_192r_3w.rda) )12r and 2r are available too.
     kc = args$known_cancer_genes,  # List of a-priori known cancer genes (to be excluded from the indel background model) - references the cancer gene census v81.  (cancergenes_cgc81.rda)
@@ -132,8 +140,8 @@ dndsout <- dndscv(
     outp = args$loc_sv_type,# Output: 1 = Global dN/dS values; 2 = Global dN/dS and dNdSloc; 3 = Global dN/dS, dNdSloc and dNdScv
     numcode = args$gennum, # NCBI genetic code number (default = 1; standard genetic code). To see the list of genetic codes supported use: ? seqinr::translate. Note that the same genetic code must be used in the dndscv and buildref functions.
     outmats = FALSE, # Output the internal N and L matrices (default = F)
-    mingenecovs = 500,  # Minimum number of genes required to run the negative binomial regression model with covariates (default = 500), 
-    dc = NULL)
+    mingenecovs = args$mingenecovs,  # Minimum number of genes required to run the negative binomial regression model with covariates (default = 500), 
+    dc = NULL) # Duplex coverage per gene. Named Numeric Vector with values reflecting the mean duplex coverage per site per gene, and names corresponding to gene names. Use this argument only when running dNdScv on duplex sequencing data to use gene coverage in the offset of the regression model 
 
 write.table(
     dndsout$sel_cv,
