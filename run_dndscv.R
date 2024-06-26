@@ -91,9 +91,9 @@ p <- add_argument(
 )
 p <- add_argument(
     p,
-    "--genelist", type="character", nargs=Inf,
+    "--genelist", type="character", nargs='+',
     help = 'limit the run to this vector of genes',
-    default=NULL
+    default = "NONE"
 )
 p <- add_argument(
     p,
@@ -116,6 +116,16 @@ if (args$covariates == 'covariates_hg19_hg38_epigenome_pcawg.rda') {
     covs <- args$covariates
 }
 
+# solving an issue with arparser not taking optional flag and character inputs simultaneously.
+# genelist: Remove blank spaces and split gene names into vector
+args$genelist <- unlist(strsplit(gsub(" ", "", args$genelist), split = ",", fixed = TRUE))
+
+# Assign default value to genelist as NULL, as required by the dndscv function.
+if((length(args$genelist) == 1)){
+    if(toupper(args$genelist) == "NONE"){
+        args$genelist <- NULL
+    }
+}
 
 # read in table
 mutations <- fread(args$varagg, sep='\t', header=TRUE)
@@ -132,7 +142,7 @@ dndsout <- dndscv(
     kc = args$known_cancer_genes,  # List of a-priori known cancer genes (to be excluded from the indel background model) - references the cancer gene census v81.  (cancergenes_cgc81.rda)
     cv = covs, # Covariates (a matrix of covariates -columns- for each gene -rows-) [default: reference covariates] [cv=NULL runs dndscv without covariates] ()
     max_muts_per_gene_per_sample = args$maxmuts,  # If n<Inf, arbitrarily the first n mutations by chr position will be kept 
-    max_coding_muts_per_sample = args$tbmmax,  # to filter out hypermutated samples.
+    max_coding_muts_per_sample = args$tmbmax,  # to filter out hypermutated samples.
     use_indel_sites = args$indels, # Use unique indel sites instead of the total number of indels (it tends to be more robust)
     min_indels = args$mindels, #  Minimum number of indels required to run the indel recurrence module
     maxcovs = args$amaxcov, # Maximum number of covariates that will be considered (additional columns in the matrix of covariates will be excluded)
