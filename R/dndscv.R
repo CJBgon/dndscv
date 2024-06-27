@@ -746,16 +746,26 @@ dndscv = function(mutations, gene_list = NULL, refdb = "hg19", sm = "192r_3w", k
         }
     }
 
-    if (!any(!is.na(wrong_ref))) {
-        wrong_refbase = NULL # Output value if there were no wrong bases
-    }
+    # if (!any(!is.na(wrong_ref))) {
+    #     wrong_refbase = NULL # Output value if there were no wrong bases
+    # }
 
     annot = annot[,setdiff(colnames(annot),c("start","end","geneind"))]
 
-    if (outmats) {
-        dndscvout = list(globaldnds = globaldnds, sel_cv = sel_cv, sel_loc = sel_loc, annotmuts = annot, genemuts = genemuts, geneindels = geneindels, mle_submodel = mle_submodel, exclsamples = exclsamples, exclmuts = exclmuts, nbreg = nbreg, nbregind = nbregind, poissmodel = poissmodel, wrongmuts = wrong_refbase, syncv = syncv, N = Nall, L = Lall)
+if (outmats) {
+        dndscvout = list(globaldnds = globaldnds, sel_cv = sel_cv, 
+            sel_loc = sel_loc, annotmuts = annot, genemuts = genemuts, 
+            geneindels = geneindels, mle_submodel = mle_submodel, 
+            exclsamples = exclsamples, exclmuts = exclmuts, nbreg = nbreg, 
+            nbregind = nbregind, poissmodel = poissmodel,
+            syncv = syncv, N = Nall, L = Lall)
     } else {
-        dndscvout = list(globaldnds = globaldnds, sel_cv = sel_cv, sel_loc = sel_loc, annotmuts = annot, genemuts = genemuts, geneindels = geneindels, mle_submodel = mle_submodel, exclsamples = exclsamples, exclmuts = exclmuts, nbreg = nbreg, nbregind = nbregind, poissmodel = poissmodel, wrongmuts = wrong_refbase, syncv = syncv)
+        dndscvout = list(globaldnds = globaldnds, sel_cv = sel_cv, 
+            sel_loc = sel_loc, annotmuts = annot, genemuts = genemuts, 
+            geneindels = geneindels, mle_submodel = mle_submodel, 
+            exclsamples = exclsamples, exclmuts = exclmuts, nbreg = nbreg, 
+            nbregind = nbregind, poissmodel = poissmodel,
+            syncv = syncv)
     }
 
 } # EOF
