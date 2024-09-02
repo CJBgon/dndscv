@@ -30,8 +30,9 @@ p <- add_argument(
 )
 p <- add_argument(
     p,
-    "--known_cancer_genes", type="character",
-    help = 'List of a-priori known cancer genes (to be excluded from the indel background model) - references the cancer gene census v81.  ("cgc81" = cancergenes_cgc81.rda)'
+    "--known_cancer_genes", type="character", nargs='+',
+    help = 'List of a-priori known cancer genes (to be excluded from the indel background model) - references the cancer gene census v81.  ("cgc81" = cancergenes_cgc81.rda)',
+    default = "cgc81"
 )
 p <- add_argument(
     p,
@@ -118,7 +119,22 @@ if (args$covariates == 'covariates_hg19_hg38_epigenome_pcawg.rda') {
 
 # solving an issue with arparser not taking optional flag and character inputs simultaneously.
 # genelist: Remove blank spaces and split gene names into vector
-args$genelist <- unlist(strsplit(gsub(" ", "", args$genelist), split = ",", fixed = TRUE))
+args$genelist <- unlist(
+    strsplit(
+        gsub(" ", "", args$genelist),
+        split = ",", 
+        fixed = TRUE
+        )
+    )
+
+# known_cancer_genes: Remove blank spaces and split gene names into vector
+args$known_cancer_genes <- unlist(
+    strsplit(
+        gsub(" ", "", args$known_cancer_genes),
+        split = ",",
+        fixed = TRUE
+        )
+    )
 
 # Assign default value to genelist as NULL, as required by the dndscv function.
 if((length(args$genelist) == 1)){
@@ -160,15 +176,3 @@ write.table(
     quote=FALSE
     )
 
-##### TODO ###: 
-# how do we reference/link the script to the rda files downloaded? their names are different:
-    # i guesss we load the data and 
-    # change line of code to search for hg38 in the data folder (place there when downloaded)
-# how can we input other refcds files? is it the path to the .rda file?
-    # (if so place into the data folder + allow specified paths.)
-
-# max_muts_per_gene_per_sample how does this affect the output? is it limited to non-synonymous muts only? (probably to filter false positives / repeats?)
-
-
-# how can we attune this to low-frequency mutations? can we optimise the dndscv hyperparameters by including a downstream model / metric to optimise?
-    # how can we link the feedback from that model back into the three tools? (would nextflow allow us to iterate on the tools and explore the searchspace?
